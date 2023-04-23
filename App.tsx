@@ -4,7 +4,6 @@ import {
   Roboto_700Bold,
   useFonts
 } from '@expo-google-fonts/roboto';
-import { View } from 'react-native';
 import { ThemeProvider } from 'styled-components/native';
 
 import { Loading } from '@components/Loading';
@@ -26,15 +25,13 @@ export default function App() {
   //   }
   // }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return <Loading />;
-  }
-
   return (
     <ThemeProvider theme={theme}>
-      <View>
-        <Groups />
-      </View>
+      {
+        fontsLoaded ? (
+          <Groups />
+        ) : <Loading />
+      }
     </ThemeProvider>
   );
 }
