@@ -6,3 +6,7 @@ export const Container = styled.View`
 
   padding: 24px;
 `;
+
+export const HeaderWrapper = styled.View`
+  margin-top: 16px;
+`;
