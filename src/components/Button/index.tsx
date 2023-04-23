@@ -4,7 +4,7 @@ import { ButtonTypeStyleProps, Container, Title } from "./styles";
 
 type ButtonProps = TouchableOpacityProps & {
   title: string;
-  type?: ButtonTypeStyleProps
+  type?: ButtonTypeStyleProps;
 }
 
 export function Button({ title, type = 'primary', ...othersProps }: ButtonProps) {
