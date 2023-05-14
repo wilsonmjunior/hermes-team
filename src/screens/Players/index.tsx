@@ -7,12 +7,28 @@ import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { IconButton } from "@components/IconButton";
 import { Input } from "@components/Input";
+import { ListEmpty } from "@components/ListEmpty";
+import { PlayerCard } from "@components/PlayerCard";
 
-import { Container, Form, ButtonWrapper, HeaderList, NumberOfPlayers } from "./styles";
+import {
+  Container,
+  Form,
+  ButtonWrapper,
+  HeaderList,
+  NumberOfPlayers,
+} from "./styles";
 
 export function Players() {
   const [team, setTeam] = useState('Time A');
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<string[]>([]);
+
+  const handleAddPlayer = () => {
+    setPlayers(oldState => [...oldState, 'Algo'])
+  }
+
+  const handleRemove = (value: string) => {
+    // 
+  }
 
   return (
     <Container>
@@ -28,7 +44,7 @@ export function Players() {
           placeholder="Nome do participante"
           autoCorrect={false}
         />
-        <IconButton icon='add' />
+        <IconButton icon='add' onPress={handleAddPlayer} />
       </Form>
 
       <HeaderList>
@@ -50,6 +66,26 @@ export function Players() {
         </NumberOfPlayers>
       </HeaderList>
 
+      <FlatList
+        data={players}
+        keyExtractor={item => item}
+        renderItem={({ item }) => (
+          <PlayerCard
+            name={item}
+            onRemove={handleRemove}
+          />
+        )}
+        ListEmptyComponent={
+          <ListEmpty
+            message="Não há pessoas nesse time"
+          />
+        }
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          { paddingBottom: 100 },
+          !players.length && { flex: 1 }
+        ]}
+      />
 
       <ButtonWrapper>
         <Button
