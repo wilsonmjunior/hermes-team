@@ -87,12 +87,10 @@ export function Players() {
         ]}
       />
 
-      <ButtonWrapper>
-        <Button
-          type="secondary"
-          title="Remover Turma"
-        />
-      </ButtonWrapper>
+      <Button
+        type="secondary"
+        title="Remover Turma"
+      />
     </Container>
   )
 }
