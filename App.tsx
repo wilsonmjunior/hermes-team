@@ -8,9 +8,9 @@ import { StatusBar } from 'react-native';
 import { ThemeProvider } from 'styled-components/native';
 
 import { Loading } from '@components/Loading';
-import { NewGroup } from '@screens/NewGroup';
 
 import { theme } from './src/theme';
+import { Routes } from './src/routes';
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -28,14 +28,14 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar 
+      <StatusBar
         backgroundColor="transparent"
         barStyle="light-content"
         translucent
       />
       {
         fontsLoaded ? (
-          <NewGroup />
+          <Routes />
         ) : <Loading />
       }
     </ThemeProvider>

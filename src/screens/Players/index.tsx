@@ -1,5 +1,6 @@
 import { FlatList } from "react-native";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 import { Button } from "@components/Button";
 import { Filter } from "@components/Filter";
@@ -13,17 +14,23 @@ import { PlayerCard } from "@components/PlayerCard";
 import {
   Container,
   Form,
-  ButtonWrapper,
   HeaderList,
   NumberOfPlayers,
 } from "./styles";
 
 export function Players() {
+  const navigation = useNavigation();
+
   const [team, setTeam] = useState('Time A');
   const [players, setPlayers] = useState<string[]>([]);
+  const [playerName, setPlayerName] = useState('');
 
   const handleAddPlayer = () => {
-    setPlayers(oldState => [...oldState, 'Algo'])
+    setPlayers(oldState => [...oldState, playerName])
+  }
+
+  const handleBack = () => {
+    navigation.navigate('groups');
   }
 
   const handleRemove = (value: string) => {
@@ -32,7 +39,10 @@ export function Players() {
 
   return (
     <Container>
-      <Header showBackButton />
+      <Header
+        showBackButton
+        onBack={handleBack}
+      />
 
       <Highlight
         title="Nome da turma"
@@ -43,6 +53,7 @@ export function Players() {
         <Input
           placeholder="Nome do participante"
           autoCorrect={false}
+          onChangeText={(text) => setPlayerName(text)}
         />
         <IconButton icon='add' onPress={handleAddPlayer} />
       </Form>

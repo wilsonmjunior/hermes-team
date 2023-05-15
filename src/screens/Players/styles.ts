@@ -14,11 +14,6 @@ export const Form = styled.View`
   border-radius: 6px;
 `;
 
-export const ButtonWrapper = styled.View`
-  flex: 1;
-  justify-content: flex-end;
-`;
-
 export const HeaderList = styled.View`
   width: 100%;
 
