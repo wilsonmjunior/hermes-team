@@ -11,7 +11,9 @@ export const Container = styled.View<ContainerProps>`
 
   flex-direction: row;
   align-items: center;
-  justify-content: ${({ center }) => center ? 'center' : 'space-between' };
+  justify-content: ${({ center }) => center ? 'center' : 'space-between'};
+
+  margin-top: 10px;
 `;
 
 export const Logo = styled.Image`
@@ -21,7 +23,7 @@ export const Logo = styled.Image`
 
 export const BackButton = styled.TouchableOpacity``;
 
-export const BackIcon = styled(CaretLeft).attrs(({ theme }) => ({ 
-  color: theme.COLORS.WHITE, 
-  size: 36, 
+export const BackIcon = styled(CaretLeft).attrs(({ theme }) => ({
+  color: theme.COLORS.WHITE,
+  size: 36,
 }))``;

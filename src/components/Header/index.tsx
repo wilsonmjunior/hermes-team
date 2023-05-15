@@ -9,14 +9,15 @@ import {
 
 type HeaderProps = {
   showBackButton?: boolean;
+  onBack?(): void;
 }
 
-export function Header({ showBackButton }: HeaderProps) {
+export function Header({ showBackButton, onBack }: HeaderProps) {
   return (
     <Container center={!showBackButton}>
       {
         showBackButton ? (
-          <BackButton>
+          <BackButton onPress={onBack}>
             <BackIcon />
           </BackButton>
         ) : null
