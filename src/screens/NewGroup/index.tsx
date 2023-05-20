@@ -42,7 +42,7 @@ export function NewGroup() {
         />
 
         <Input
-          onChangeText={(text) => setGroup(text)}
+          onChangeText={setGroup}
         />
 
         <ButtonWrapper>
