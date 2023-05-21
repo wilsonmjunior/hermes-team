@@ -7,6 +7,7 @@ import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { Input } from "@components/Input";
 import { createGroup } from "@storage/group/createGroup";
+import { AppError } from "@utils/AppError";
 
 import {
   ButtonWrapper,
@@ -22,10 +23,19 @@ export function NewGroup() {
 
   async function handleAddPlayers() {
     try {
+      if (!!group.trim().length) {
+        return Alert.alert('Nova Turma', 'Informe o nome da turma.');
+      }
+
       await createGroup(group);
       navigation.navigate('players', { group });
     } catch (error) {
-      Alert.alert('Failed to add players');
+      if (error instanceof AppError) {
+        Alert.alert('Nova Turma', error.message);
+      } else {
+        console.log('error:: ', error);
+        Alert.alert('Nova Turma', 'Não foi possível criar um nova turma');
+      }
     }
   }
 
