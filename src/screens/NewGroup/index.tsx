@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Button } from "@components/Button";
 import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { Input } from "@components/Input";
+import { createGroup } from "@storage/group/createGroup";
 
 import {
   ButtonWrapper,
@@ -18,11 +20,16 @@ export function NewGroup() {
 
   const [group, setGroup] = useState('');
 
-  const handleAddPlayers = () => {
-    navigation.navigate('players', { group });
+  async function handleAddPlayers() {
+    try {
+      await createGroup(group);
+      navigation.navigate('players', { group });
+    } catch (error) {
+      Alert.alert('Failed to add players');
+    }
   }
 
-  const handleBack = () => {
+  function handleBack() {
     navigation.navigate('groups');
   }
 
