@@ -42,6 +42,16 @@ export function Players() {
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [playerName, setPlayerName] = useState('');
 
+  async function fetchPlayers() {
+    try {
+      const playersByTeam = await getPlayersByGroupAndTeam(params.group, team);
+      setPlayers(playersByTeam);
+    } catch (error) {
+      console.log('error:: ', error);
+      Alert.alert('Players', 'Não foi possível carregar os players do time selecionado.');
+    }
+  }
+
   async function handleAddPlayer() {
     if (!playerName.trim().length) {
       return Alert.alert('Novo participante', 'Informe o nome da pessoa para adicionar.')
@@ -54,10 +64,10 @@ export function Players() {
 
     try {
       await addPlayers(newPlayer, params.group);
-      const listPlayers = await getPlayersByGroup(params.group);
 
       setPlayerName('');
-      setPlayers(listPlayers);
+      // fetch players again
+      setPlayers(oldState => [...oldState, newPlayer]);
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert('Novo participante', error.message);
@@ -77,16 +87,6 @@ export function Players() {
   }
 
   useEffect(() => {
-    async function fetchPlayers() {
-      try {
-        const playersByTeam = await getPlayersByGroupAndTeam(params.group, team);
-        setPlayers(playersByTeam);
-      } catch (error) {
-        console.log('error:: ', error);
-        Alert.alert('Players', 'Não foi possível carregar os players do time selecionado.');
-      }
-    }
-
     fetchPlayers();
   }, [params.group, team]);
 
