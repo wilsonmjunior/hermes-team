@@ -1,5 +1,5 @@
-import { Alert, FlatList } from "react-native";
-import { useEffect, useState } from "react";
+import { Alert, FlatList, TextInput } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import {
   ParamListBase,
   RouteProp,
@@ -42,6 +42,8 @@ export function Players() {
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [playerName, setPlayerName] = useState('');
 
+  const inputRef = useRef<TextInput>(null)
+
   async function fetchPlayers() {
     try {
       const playersByTeam = await getPlayersByGroupAndTeam(params.group, team);
@@ -64,6 +66,8 @@ export function Players() {
 
     try {
       await addPlayers(newPlayer, params.group);
+
+      inputRef.current?.blur();
 
       setPlayerName('');
       // fetch players again
@@ -104,9 +108,12 @@ export function Players() {
 
       <Form>
         <Input
+          inputRef={inputRef}
           placeholder="Nome do participante"
           autoCorrect={false}
           onChangeText={(text) => setPlayerName(text)}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
         <IconButton icon='add' onPress={handleAddPlayer} />
       </Form>
