@@ -1,5 +1,5 @@
-import { FlatList } from "react-native";
-import { useState } from "react";
+import { Alert, FlatList } from "react-native";
+import { useEffect, useState } from "react";
 import {
   ParamListBase,
   RouteProp,
@@ -15,6 +15,10 @@ import { IconButton } from "@components/IconButton";
 import { Input } from "@components/Input";
 import { ListEmpty } from "@components/ListEmpty";
 import { PlayerCard } from "@components/PlayerCard";
+import { addPlayers } from "@storage/players/addPlayers";
+import { PlayerStorageDTO } from "@storage/players/dtos/PlayerStorageDTO";
+import { getPlayersByGroup } from "@storage/players/getPlayersByGroup";
+import { AppError } from "@utils/AppError";
 
 import {
   Container,
@@ -22,6 +26,7 @@ import {
   HeaderList,
   NumberOfPlayers,
 } from "./styles";
+import { getPlayersByGroupAndTeam } from "@storage/players/getPlayersByGroupAndTeam";
 
 type RouteParams = RouteProp<ParamListBase, string> & {
   params: {
@@ -34,20 +39,56 @@ export function Players() {
   const { params } = useRoute<RouteParams>();
 
   const [team, setTeam] = useState('Time A');
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [playerName, setPlayerName] = useState('');
 
-  const handleAddPlayer = () => {
-    setPlayers(oldState => [...oldState, playerName])
+  async function handleAddPlayer() {
+    if (!playerName.trim().length) {
+      return Alert.alert('Novo participante', 'Informe o nome da pessoa para adicionar.')
+    }
+
+    const newPlayer = {
+      name: playerName,
+      team,
+    };
+
+    try {
+      await addPlayers(newPlayer, params.group);
+      const listPlayers = await getPlayersByGroup(params.group);
+
+      setPlayerName('');
+      setPlayers(listPlayers);
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert('Novo participante', error.message);
+      } else {
+        console.log('error:: ', error);
+        Alert.alert('Novo participante', 'Erro ao adicionar participante.')
+      }
+    }
   }
 
-  const handleBack = () => {
+  function handleBack() {
     navigation.navigate('groups');
   }
 
-  const handleRemove = (value: string) => {
+  function handleRemove(value: string) {
     // 
   }
+
+  useEffect(() => {
+    async function fetchPlayers() {
+      try {
+        const playersByTeam = await getPlayersByGroupAndTeam(params.group, team);
+        setPlayers(playersByTeam);
+      } catch (error) {
+        console.log('error:: ', error);
+        Alert.alert('Players', 'Não foi possível carregar os players do time selecionado.');
+      }
+    }
+
+    fetchPlayers();
+  }, [params.group, team]);
 
   return (
     <Container>
@@ -91,10 +132,10 @@ export function Players() {
 
       <FlatList
         data={players}
-        keyExtractor={item => item}
+        keyExtractor={item => item.name}
         renderItem={({ item }) => (
           <PlayerCard
-            name={item}
+            name={item.name}
             onRemove={handleRemove}
           />
         )}
