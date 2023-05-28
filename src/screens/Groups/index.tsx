@@ -7,6 +7,7 @@ import { GroupCard } from "@components/GroupCard";
 import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { ListEmpty } from "@components/ListEmpty";
+import { Loading } from "@components/Loading";
 import { getGroups } from "@storage/group/getGroups";
 
 import { Container, HeaderWrapper } from "./styles";
@@ -14,6 +15,7 @@ import { Container, HeaderWrapper } from "./styles";
 export function Groups() {
   const navigation = useNavigation();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [groups, setGroups] = useState<string[]>([]);
 
   function handleNew() {
@@ -28,10 +30,13 @@ export function Groups() {
     useCallback(() => {
       async function loadGroups() {
         try {
+          setIsLoading(true);
           const data = await getGroups();
           setGroups(data);
         } catch (error) {
           Alert.alert('Turmas', 'Não foi possível carregar as turmas.');
+        } finally {
+          setIsLoading(false);
         }
       }
 
@@ -50,18 +55,24 @@ export function Groups() {
         subtitle="Jogue com a sua turma"
       />
 
-      <FlatList
-        data={groups}
-        keyExtractor={item => item}
-        renderItem={({ item }) => (
-          <GroupCard
-            title={item}
-            onPress={() => handleOpenGroup(item)}
+      {
+        isLoading ? (
+          <Loading />
+        ) : (
+          <FlatList
+            data={groups}
+            keyExtractor={item => item}
+            renderItem={({ item }) => (
+              <GroupCard
+                title={item}
+                onPress={() => handleOpenGroup(item)}
+              />
+            )}
+            contentContainerStyle={groups.length === 0 && { flex: 1 }}
+            ListEmptyComponent={<ListEmpty message="Comece cadastrando uma turma!" />}
           />
-        )}
-        contentContainerStyle={groups.length === 0 && { flex: 1 }}
-        ListEmptyComponent={<ListEmpty message="Comece cadastrando uma turma!" />}
-      />
+        )
+      }
 
       <Button
         title="Criar nova turma"
