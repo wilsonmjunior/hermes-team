@@ -98,6 +98,8 @@ export function Players() {
   async function removeGroup() {
     try {
       await removeGroupByName(params.group);
+
+      navigation.navigate('groups');
     } catch (error) {
       Alert.alert('Remover grupo', 'Não foi possível remover Turma.');
     }
