@@ -97,7 +97,7 @@ export function Players() {
       await removePlayersByGroup(playerName, params.group);
       await fetchPlayers();
     } catch (error) {
-      Alert.alert('Remover player', 'Não foi possível remover o player.')
+      Alert.alert('Remover participante', 'Não foi possível remover o participante.')
     }
   }
 
@@ -107,12 +107,12 @@ export function Players() {
 
       navigation.navigate('groups');
     } catch (error) {
-      Alert.alert('Remover grupo', 'Não foi possível remover Turma.');
+      Alert.alert('Remover turma', 'Não foi possível remover turma.');
     }
   }
 
   async function handleRemoveGroup() {
-    Alert.alert('Remover grupo', 'Deseja remover o grupo?', [
+    Alert.alert('Remover turma', 'Deseja remover a turma?', [
       {
         text: 'Não',
         style: 'cancel',
@@ -198,7 +198,7 @@ export function Players() {
 
       <Button
         type="secondary"
-        title="Remover Turma"
+        title="Remover turma"
         onPress={handleRemoveGroup}
       />
     </Container>
