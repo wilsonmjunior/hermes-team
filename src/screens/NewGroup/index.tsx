@@ -23,7 +23,7 @@ export function NewGroup() {
 
   async function handleAddPlayers() {
     try {
-      if (!!group.trim().length) {
+      if (!group.trim().length) {
         return Alert.alert('Nova Turma', 'Informe o nome da turma.');
       }
 
